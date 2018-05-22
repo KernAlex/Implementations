@@ -43,17 +43,17 @@ public class RadixLSD {
      */
     private static void sortIn(int[] list) {
         for (int i = 0; i < list.length; i++) {
-            int x = list[i] % minInt;
-            while (x > 10) {
+            int x = (list[i] % minInt) / (minInt / 10);
+            while (x >= 10) {
                 x /= 10;
             }
-            System.out.println(x);
             order[x].push(list[i]);
         }
-        int pointer = 0;
-        for (int i = 9; i > 0; i--) {
+        int pointer = list.length - 1;
+        for (int i = 9; i >= 0; i--) {
             while (!order[i].isEmpty()) {
                 list[pointer] = order[i].pop();
+                pointer--;
             }
         }
     }
