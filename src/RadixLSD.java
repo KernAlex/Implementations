@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class RadixLSD {
     /**
      * Just because I have been thinking about this implementation, I figured I would have a
@@ -5,8 +7,18 @@ public class RadixLSD {
      * objects. This will be a static class that will just take in the list and sort it;
      */
     private static int maxInt;
+    private static int minInt;
+    private static Stack<Integer>[] order = new Stack[10];
     public static void sortIntList(int[] unsortedList) {
         findMaxItem(unsortedList);
+        for (int i = 0; i < order.length; i++) {
+            order[i] = new Stack<>();
+        }
+        minInt = 10;
+        while (maxInt > minInt) {
+            sortIn(unsortedList);
+            minInt *= 10;
+        }
     }
 
     /**
@@ -19,6 +31,30 @@ public class RadixLSD {
         for (int i : list) {
             max = Math.max(max, i);
         }
-        maxInt = max;
+        int t = 1;
+        while (max != 0) {
+            t *= 10;
+            max = max / 10;
+        }
+        maxInt = t * 10;
+    }
+    /**
+     * Sorts the list into the proper bins;
+     */
+    private static void sortIn(int[] list) {
+        for (int i = 0; i < list.length; i++) {
+            int x = list[i] % minInt;
+            while (x > 10) {
+                x /= 10;
+            }
+            System.out.println(x);
+            order[x].push(list[i]);
+        }
+        int pointer = 0;
+        for (int i = 9; i > 0; i--) {
+            while (!order[i].isEmpty()) {
+                list[pointer] = order[i].pop();
+            }
+        }
     }
 }
